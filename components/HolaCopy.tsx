@@ -21,9 +21,7 @@ const HolaCopy = () => {
 
     client.get('/egarove/testingServer/main/animales.json')
       .then((response: string) => {
-        console.log(response);
-        const nuevos1 = parser.parse(response);
-        addAnimales(nuevos1);
+        addAnimales(parser.parse(response));
       })
       .catch(console.error);
 
@@ -32,9 +30,7 @@ const HolaCopy = () => {
 
     client.get('/egarove/testingServer/main/animales.json')
       .then((response: string) => {
-        console.log(response);
-        const nuevos2 = parser.parse(response);
-        addAnimales(nuevos2);
+        addAnimales(parser.parse(response));
       })
       .catch(console.error);
 
