@@ -13,7 +13,7 @@ export default class StrategyClient {
     return StrategyClient.instance;
   }
 
-  // Cambiar estrategia en tiempo de ejecución
+  // cambiar de estrategia
   public setStrategy(strategy: IHttpStrategy) {
     this.strategy = strategy;
   }

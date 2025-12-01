@@ -8,11 +8,11 @@ export default class AxiosStrategy implements IHttpStrategy {
     this.axiosInstance = axios.create({ baseURL });
   }
 
-  get(url: string) {
-    return this.axiosInstance.get(url);
+  async get(url: string) {
+    return this.axiosInstance.get(url).then(res => res.data);
   }
 
-  post(url: string, data: any) {
-    return this.axiosInstance.post(url, data);
+  async post(url: string, data: any) {
+    return this.axiosInstance.post(url, data).then(res => res.data);
   }
 }

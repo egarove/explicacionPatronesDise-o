@@ -1,8 +1,3 @@
-// AxiosStrategy.ts
-import axios, { AxiosInstance } from 'axios';
-
-// Otra estrategia, por ejemplo usando fetch
-// FetchStrategy.ts
 import IHttpStrategy from './IHttpStrategy';
 
 export default class FetchStrategy implements IHttpStrategy {
