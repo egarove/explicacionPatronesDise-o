@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import useAppContext from "../context/Context";
 import StrategyClient from "../Singleton/StrategyClient";
 import AxiosStrategy from "../Strategy/AxiosStrategy";
@@ -21,6 +21,7 @@ const HolaCopy = () => {
   // Store global
   const animales = useAppContext((s) => s.animales);
   const addAnimales = useAppContext((s) => s.addAnimales);
+  const vaciasAnimales = useAppContext((s) => s.vaciarListaAnimales);
 
   // Instancias (Singleton y Parser)
   const client = StrategyClient.getInstance();
@@ -61,7 +62,10 @@ const HolaCopy = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.purpleButton]}
-            onPress={() => cargarDatos("Fetch")}
+            onPress={() => {
+              vaciasAnimales;
+              cargarDatos("Fetch");              
+            }}
             activeOpacity={0.8}
           >
             <Text style={styles.buttonText}>Usar Fetch</Text>
@@ -69,7 +73,10 @@ const HolaCopy = () => {
 
           <TouchableOpacity
             style={[styles.button, styles.blueButton]}
-            onPress={() => cargarDatos("Axios")}
+            onPress={() => {
+              vaciasAnimales;
+              cargarDatos("Axios");              
+            }}
             activeOpacity={0.8}
           >
             <Text style={styles.buttonText}>Usar Axios</Text>
@@ -89,8 +96,8 @@ const HolaCopy = () => {
               </View>
 
               <View style={styles.cardDetails}>
-                <Text style={styles.detailText}>Peso: {animal.peso_kg}kg</Text>
-                <Text style={styles.detailText}>Vida: {animal.vida} años</Text>
+                <Text style={styles.detailText}>Peso medio: {animal.peso_kg}kg</Text>
+                <Text style={styles.detailText}>Esperanza de vida: {animal.vida} años</Text>
               </View>
             </View>
           ))}

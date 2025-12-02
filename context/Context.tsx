@@ -7,6 +7,7 @@ type AppContext = {
   addAnimal: (a: Animal) => void,
   addAnimales: (a: Animal[]) => void,
   delAnimal: (esp: String) => void,
+  vaciarListaAnimales: () => void,
 }
 
 const useAppContext = create<AppContext>()((set) => ({
@@ -14,6 +15,7 @@ const useAppContext = create<AppContext>()((set) => ({
   addAnimal: (a) => set((state) => ({ animales: [...state.animales, a] })),
   addAnimales: (a) => set((state) => ({ animales: [...state.animales, ...a] })),
   delAnimal: (esp) => set((state) => ({ animales: state.animales.filter((item) => item.esp != esp) })),
+  vaciarListaAnimales: () => set((state) => ({ animales: [] })),
 }))
 
 
