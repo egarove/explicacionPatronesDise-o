@@ -63,7 +63,7 @@ const HolaCopy = () => {
           <TouchableOpacity
             style={[styles.button, styles.purpleButton]}
             onPress={() => {
-              vaciasAnimales;
+              vaciasAnimales();
               cargarDatos("Fetch");              
             }}
             activeOpacity={0.8}
@@ -74,7 +74,7 @@ const HolaCopy = () => {
           <TouchableOpacity
             style={[styles.button, styles.blueButton]}
             onPress={() => {
-              vaciasAnimales;
+              vaciasAnimales();
               cargarDatos("Axios");              
             }}
             activeOpacity={0.8}
