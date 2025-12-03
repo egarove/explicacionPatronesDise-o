@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import IHttpStrategy from './IHttpStrategy';
+import IHttpStrategy from '../Interfaces/HttpInterface';
 
 export default class AxiosStrategy implements IHttpStrategy {
   private axiosInstance: AxiosInstance;
@@ -7,6 +7,8 @@ export default class AxiosStrategy implements IHttpStrategy {
   constructor(baseURL: string) {
     this.axiosInstance = axios.create({ baseURL });
   }
+
+  tipo = "Axios";
 
   async get(url: string) {
     return this.axiosInstance.get(url).then(res => res.data);

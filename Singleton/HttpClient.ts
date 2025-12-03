@@ -1,16 +1,16 @@
-import IHttpStrategy from '../Strategy/IHttpStrategy';
+import IHttpStrategy from '../Interfaces/HttpInterface';
 
-export default class StrategyClient {
-  private static instance: StrategyClient;
+export default class HttpClient {
+  private static instance: HttpClient;
   private strategy!: IHttpStrategy;
 
   private constructor() {}
 
-  public static getInstance(): StrategyClient {
-    if (!StrategyClient.instance) {
-      StrategyClient.instance = new StrategyClient();
+  public static getInstance(): HttpClient {
+    if (!HttpClient.instance) {
+      HttpClient.instance = new HttpClient();
     }
-    return StrategyClient.instance;
+    return HttpClient.instance;
   }
 
   // cambiar de estrategia

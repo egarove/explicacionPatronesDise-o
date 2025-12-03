@@ -1,10 +1,11 @@
 import { Animal } from '../entities/Animal'; 
-export interface ParsingStrategy {
-  parse(rawData: string): Animal[];
-}
+import { IParsingStrategy } from '../Interfaces/ParsingInterface';
 
 // --- ESTRATEGIA JSON ---
-export class JsonParsingStrategy implements ParsingStrategy {
+export class JsonParsingStrategy implements IParsingStrategy {
+
+  tipo = "Json";
+
   parse(rawData: any): Animal[] {
     try {
       console.log("--> Usando Estrategia JSON");

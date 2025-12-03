@@ -6,51 +6,52 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import useAppContext from "../context/Context";
-import StrategyClient from "../Singleton/StrategyClient";
+import HttpClient from "../Singleton/HttpClient";
 import AxiosStrategy from "../Strategy/AxiosStrategy";
 import FetchStrategy from "../Strategy/FetchStrategy";
-import { JsonParsingStrategy } from "../Strategy/DataParsingStrategy";
 import { StyleSheet } from "react-native";
+import IHttpStrategy from "../Interfaces/HttpInterface";
+import ParsingClient from "../Singleton/ParsingClient";
+import { JsonParsingStrategy } from "../Strategy/DataParsingStrategy";
+import { IParsingStrategy } from "../Interfaces/ParsingInterface";
+
+
+const url = "/egarove/testingServer/main/animales.json";
+const baseUrl = "https://raw.githubusercontent.com";
 
 const HolaCopy = () => {
-  // Estado local para mensajes de interfaz
-  const [mensaje, setMensaje] = useState("Selecciona una estrategia");
 
-  // Store global
+  const [mensajeHttp, setMensajeHttp] = useState("Selecciona una estrategia");
+  const [mensajeParse, setMensajeParse] = useState("");
+
+  //contexto
   const animales = useAppContext((s) => s.animales);
   const addAnimales = useAppContext((s) => s.addAnimales);
-  const vaciasAnimales = useAppContext((s) => s.vaciarListaAnimales);
-
-  // Instancias (Singleton y Parser)
-  const client = StrategyClient.getInstance();
-  const parser = new JsonParsingStrategy();
-  const url = "/egarove/testingServer/main/animales.json";
-  const baseUrl = "https://raw.githubusercontent.com";
+  const vaciarAnimales = useAppContext((s) => s.vaciarListaAnimales);
 
   // Función unificada para manejar las peticiones
-  const cargarDatos = (tipo: "Fetch" | "Axios") => {
-    setMensaje(`Cargando con ${tipo}...`);
+  const cargarDatos = (estrategiaHttp: IHttpStrategy, estrategiaParse: IParsingStrategy) => {
+    setMensajeHttp(`Cargando con ${estrategiaHttp.tipo}...`);
 
-    // 1. Configurar Estrategia
-    if (tipo === "Axios") {
-      client.setStrategy(new AxiosStrategy(baseUrl));
-    } else {
-      client.setStrategy(new FetchStrategy(baseUrl));
-    }
+    vaciarAnimales();
 
-    // 2. Ejecutar Petición
-    client
-      .get(url)
+    //ssingleton para estrategia fetch o axios
+    HttpClient.getInstance().setStrategy(estrategiaHttp);
+    //singleton para estrategia json o xml
+    ParsingClient.getInstance().setStrategy(estrategiaParse)
+
+    HttpClient.getInstance().get(url)
       .then((response) => {
-        const datosParseados = parser.parse(response);
+        const datosParseados = ParsingClient.getInstance().parse(response);
         addAnimales(datosParseados);
-        setMensaje(`¡Datos recibidos vía ${tipo}!`);
+        setMensajeHttp(`¡Datos recibidos vía ${estrategiaHttp.tipo}!`);
+        setMensajeParse(`Convertido desde ${estrategiaParse.tipo}`)
       })
       .catch((error) => {
         console.error(error);
-        setMensaje("Error en la carga ");
+        setMensajeHttp("Error en la carga ");
       });
   };
 
@@ -58,13 +59,13 @@ const HolaCopy = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#f9fafb" />
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>HolaCopy</Text>
+        <Text style={styles.title}>Animales</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.purpleButton]}
             onPress={() => {
-              vaciasAnimales();
-              cargarDatos("Fetch");              
+              //establecer estrategias fetch y json
+              cargarDatos(new FetchStrategy(baseUrl), new JsonParsingStrategy());
             }}
             activeOpacity={0.8}
           >
@@ -74,17 +75,18 @@ const HolaCopy = () => {
           <TouchableOpacity
             style={[styles.button, styles.blueButton]}
             onPress={() => {
-              vaciasAnimales();
-              cargarDatos("Axios");              
+              //establecer estrategias axios y json
+              cargarDatos(new AxiosStrategy(baseUrl), new JsonParsingStrategy());
             }}
             activeOpacity={0.8}
           >
             <Text style={styles.buttonText}>Usar Axios</Text>
           </TouchableOpacity>
         </View>
-        /* --- MENSAJE DE ESTADO ---*/
-        <Text style={styles.messageText}>{mensaje}</Text>
-        /* --- LISTA DE RESULTADOS --- */
+        
+        <Text style={styles.messageText}>{mensajeHttp}</Text>
+        <Text style={styles.messageText}>{mensajeParse}</Text>
+
         <View style={styles.listContainer}>
           {animales.map((animal, index) => (
             <View key={index} style={styles.card}>
@@ -169,9 +171,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderLeftWidth: 5,
     borderLeftColor: "#6366f1",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
 
     elevation: 2,
     shadowColor: "#000",

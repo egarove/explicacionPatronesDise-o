@@ -1,4 +1,4 @@
-import IHttpStrategy from './IHttpStrategy';
+import IHttpStrategy from '../Interfaces/HttpInterface';
 
 export default class FetchStrategy implements IHttpStrategy {
   private baseURL: string;
@@ -6,6 +6,8 @@ export default class FetchStrategy implements IHttpStrategy {
   constructor(baseURL: string) {
     this.baseURL = baseURL;
   }
+
+  tipo = "Fetch";
 
   async get(url: string) {
     const response = await fetch(this.baseURL + url);
