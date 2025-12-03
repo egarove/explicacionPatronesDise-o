@@ -18,7 +18,8 @@ import { JsonParsingStrategy } from "../Strategy/DataParsingStrategy";
 import { IParsingStrategy } from "../Interfaces/ParsingInterface";
 
 
-const url = "/egarove/testingServer/main/animales.json";
+const url1 = "/alexvl1304/testAnimales/refs/heads/main/animales.json";
+const url2 = "/egarove/testingServer/main/animales.json";
 const baseUrl = "https://raw.githubusercontent.com";
 
 const HolaCopy = () => {
@@ -32,12 +33,12 @@ const HolaCopy = () => {
   const vaciarAnimales = useAppContext((s) => s.vaciarListaAnimales);
 
   // Función unificada para manejar las peticiones
-  const cargarDatos = (estrategiaHttp: IHttpStrategy, estrategiaParse: IParsingStrategy) => {
+  const cargarDatos = (estrategiaHttp: IHttpStrategy, estrategiaParse: IParsingStrategy, url: string) => {
     setMensajeHttp(`Cargando con ${estrategiaHttp.tipo}...`);
 
     vaciarAnimales();
 
-    //ssingleton para estrategia fetch o axios
+    //singleton para estrategia fetch o axios
     HttpClient.getInstance().setStrategy(estrategiaHttp);
     //singleton para estrategia json o xml
     ParsingClient.getInstance().setStrategy(estrategiaParse)
@@ -65,7 +66,7 @@ const HolaCopy = () => {
             style={[styles.button, styles.purpleButton]}
             onPress={() => {
               //establecer estrategias fetch y json
-              cargarDatos(new FetchStrategy(baseUrl), new JsonParsingStrategy());
+              cargarDatos(new FetchStrategy(baseUrl), new JsonParsingStrategy(), url2);
             }}
             activeOpacity={0.8}
           >
@@ -76,7 +77,7 @@ const HolaCopy = () => {
             style={[styles.button, styles.blueButton]}
             onPress={() => {
               //establecer estrategias axios y json
-              cargarDatos(new AxiosStrategy(baseUrl), new JsonParsingStrategy());
+              cargarDatos(new AxiosStrategy(baseUrl), new JsonParsingStrategy(), url2);
             }}
             activeOpacity={0.8}
           >
